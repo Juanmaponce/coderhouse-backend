@@ -1,26 +1,34 @@
-const Container = require('./class')
+const express = require('express')
+const Container = require('./desafio2/contenedor')
 
-const run = async function(){
-    const file = new Container('productos.txt')
-    await file.init()
+const app = express()
+const file = new Container('./desafio2/productos.json')
+file.init()
 
-    const save = await file.save({ "Name": "Cheese", "Price" : 2.50, "Location": "Refrigerated foods"})
-    const save1 = await file.save({ "Name": "Crisps", "Price" : 3, "Location": "the Snack isle"})
-    const save2 = await file.save({ "Name": "Pizza", "Price" : 4, "Location": "Refrigerated foods"})
-    const save3 = await file.save({ "Name": "Chocolate", "Price" : 1.50, "Location": "the Snack isle"})
-    const save4 = await file.save({ "Name": "Self-raising flour", "Price" : 1.50, "Location": "Home baking"})
-    const save5 = await file.save({ "Name": "Ground almonds", "Price" : 3, "Location": "Home baking"})
-    console.log(`Nuevo item con id ${save}`)
-
-    const all = file.getAll()
-    console.log(`el tamaño de la lista es de ${all.length}`)
-
-    const getId = file.getById(3)
-    console.log(`el objeto es ${JSON.stringify(getId)}`)
-
-    //file.deleteById(1)  //estos metodos estan deshabilitados para que no generen conflictos!
-    
-    //file.deleteAll()
-}
-
-run()
+const server = app.listen(process.env.PORT || 8080 , ()=>{
+    try{
+        console.log('run')
+    }
+    catch(err){
+        console.log(err)
+    }
+})
+app.get('/productos', async (req, res) =>{
+    try{
+        const elementos = await file.getAll()
+        res.send(` Los elementos del archivo son ${JSON.stringify(elementos)}`)
+    }
+    catch(err){
+        res.send(`Ocurrio un error al obtener los elementos: ${err}`)
+    }
+})
+app.get('/productoRandom',(req, res) =>{
+    const id = Math.floor(Math.random() * 4) + 1
+    try{
+        const elementoRandom = file.getById(id)
+        res.send(`El elemento con id ${id}, es ${JSON.stringify(elementoRandom)}`)
+    }
+    catch(err){
+        res.send(`Ocurrio un error al intentar obtener el elemento por id ${err}`)
+    }
+})

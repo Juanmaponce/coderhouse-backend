@@ -1,37 +1,37 @@
-class Contenedor {
-  constructor() {
-    this.objects = [];
+class Usuario {
+  constructor(nombre, apellido, libros, mascotas ) {
+    this.nombre = nombre;
+    this.apellido = apellido;
+    this.libros = libros;
+    this.mascotas = mascotas;
+  }
+  getFullName() {
+    return this.nombre;
+  }
+  addMascota(mascota) {
+    this.mascotas.push(mascota);
+  }
+  countMascotas() {
+    return this.mascotas.length;
+  }
+  addlibro(nombre, autor) {
+    this.libros.push({
+      nombre: nombre,
+      autor: autor
+    });
+  }
+  getBookNames() {
+    return this.libros.map(libro => libro.nombre);
   }
 
-  save(object) {
-    this.objects.push(object);
-  }
-
-  getById(id) {
-    return this.objects.find((object) => object.id === id);
-  }
-  getAll() {
-    return this.objects;
-  }
-  deleteById(id) {
-    this.objects = this.objects.filter((object) => object.id !== id);
-  }
-  deleteAll() {
-    this.objects = [];
-  }
 }
 
-let testContainer = new Contenedor();
+let testUsuario = new Usuario('Juan', 'Perez', [{nombre: 'libro1', autor:'autor1'}], ['perro1', 'perro2']);
 
-testContainer.save({id:1, title:"title1", price:500, thumbnail:"thumbnail1"});
-testContainer.save({id:2, title:"title2", price:500, thumbnail:"thumbnail2"});
-testContainer.save({id:3, title:"title3", price:500, thumbnail:"thumbnail3"});
-testContainer.save({id:4, title:"title4", price:500, thumbnail:"thumbnail4"});
-console.log(testContainer);
-console.log(testContainer.getById(3))
-console.log(testContainer.getAll())
-testContainer.deleteById(2);
-console.log(testContainer)
-testContainer.deleteAll(2);
-console.log(testContainer)
+testUsuario.addlibro('libro2', 'autor2');
+testUsuario.addMascota('perro3');
+testUsuario.addMascota('perro4');
+testUsuario.getBookNames();
+testUsuario.countMascotas();
+testUsuario.getFullName();
 
